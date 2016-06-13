@@ -90,9 +90,19 @@ class Bernstein:
     #Returns a bernstein that approximates a function
     #start and end are where you want to approximate it
     #The resulting polynomial models the points squished into [0,1]
+    @staticmethod
     def createBernsteinFromFunction(f, degree, start, end):
         p=np.zeros((degree+1),)
         for i in range(degree+1):
             p[i]=f(i/degree*(end-start)+start)
         return Bernstein(p)
     
+    @staticmethod
+    def createRandomBernstein(degree, randomness, seed, startRange=-1, endRange=1):
+        points = np.empty((randomness,1), float)
+        np.random.seed(seed)
+        for i in range(randomness):
+            points[i]=i/(randomness-1)
+        points=np.concatenate((points,(endRange-startRange)*np.random.random((randomness,2))+startRange),1)
+        return Bernstein.createBernsteinFromPoints(points, degree)
+        
